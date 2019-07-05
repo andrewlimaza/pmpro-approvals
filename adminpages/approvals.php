@@ -51,22 +51,22 @@ if ( ! empty( $_REQUEST['approve'] ) ) {
 		<?php _e( 'Approvals', 'pmpro-approvals' ); ?>
 	</h2>	
 	<ul class="subsubsub">
-		<li class="all"><a href="<?php echo admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( esc_attr( $s ) ) . "&l=$l&status=all" ); ?>" class="
+		<li class="all"><a href="<?php echo esc_url_raw( admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( $s ) . "&l=$l&status=all" ) ); ?>" class="
 											<?php
 											if ( $status == 'all' ) {
 										?>
 									 current<?php } ?>"><?php _e( 'All', 'pmpro-approvals' ); ?></a></li> |
-		<li class="pending"><a href="<?php echo admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( esc_attr( $s ) ) . "&l=$l&status=pending" ); ?>" class="
+		<li class="pending"><a href="<?php echo esc_url_raw( admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( $s ) . "&l=$l&status=pending" ) ); ?>" class="
 												<?php
 												if ( $status == 'pending' || empty( $status ) ) {
 											?>
 										 current<?php } ?>"><?php _e( 'Pending', 'pmpro-approvals' ); ?></a></li> |
-		<li class="approved"><a href="<?php echo admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( esc_attr( $s ) ) . "&l=$l&status=approved" ); ?>" class="
+		<li class="approved"><a href="<?php echo esc_url_raw( admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( $s ) . "&l=$l&status=approved" ) ); ?>" class="
 													<?php
 													if ( $status == 'approved' ) {
 												?>
 											 current<?php } ?>"><?php _e( 'Approved', 'pmpro-approvals' ); ?></a></li> |
-		<li class="denied"><a href="<?php echo admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( esc_attr( $s ) ) . "&l=$l&status=denied" ); ?>" class="
+		<li class="denied"><a href="<?php echo esc_url_raw( admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( $s ) . "&l=$l&status=denied" ) ); ?>" class="
 												<?php
 												if ( $status == 'denied' ) {
 											?>
@@ -95,7 +95,7 @@ selected="selected"<?php } ?>><?php _e( 'All Levels', 'pmpro-approvals' ); ?></o
 									<?php
 									if ( $l == $level->id ) {
 							?>
-							selected="selected"<?php } ?>><?php echo $level->name; ?></option>
+							selected="selected"<?php } ?>><?php echo esc_html( $level->name ); ?></option>
 		<?php
 		}
 		?>
@@ -142,7 +142,7 @@ selected="selected"<?php } ?>><?php _e( 'All Levels', 'pmpro-approvals' ); ?></o
 		<?php
 		if ( $l == 1 ) {
 ?>
-<?php echo $totalrows; ?> <?php _e( 'applications awaiting review', 'pmpro-approvals' ); ?>.<?php } ?>
+<?php echo intval( $totalrows ); ?> <?php _e( 'applications awaiting review', 'pmpro-approvals' ); ?>.<?php } ?>
 		</p>
 		<?php
 	}
@@ -157,7 +157,7 @@ selected="selected"<?php } ?>><?php _e( 'All Levels', 'pmpro-approvals' ); ?></o
 				<?php do_action( 'pmpro_approvals_list_extra_cols_header', $theusers ); ?>
 				<th><?php _e( 'Membership', 'pmpro-approvals' ); ?></th>					
 				<th><?php _e( 'Approval Status', 'pmpro-approvals' ); ?></th>
-				<th><a href="<?php echo admin_url( 'admin.php?page=pmpro-approvals&s=' . esc_attr( $s ) . '&limit=' . $limit . '&pn=' . $pn . '&sortby=user_registered' ); ?>
+				<th><a href="<?php echo esc_url_raw( admin_url( 'admin.php?page=pmpro-approvals&s=' . urlencode( $s ) . '&limit=' . $limit . '&pn=' . $pn . '&sortby=user_registered' ) ); ?>
 										<?php
 										if ( esc_attr( $sortby ) == 'user_registered' && esc_attr( $sortorder ) == 'DESC' ) {
 						?>
@@ -181,9 +181,9 @@ class="alternate"<?php } ?>>
 						<td class="username column-username">
 							<?php echo get_avatar( $theuser->ID, 32 ); ?>								
 							<?php if ( current_user_can( 'edit_users' ) ) { ?>
-									<strong><a href="user-edit.php?user_id=<?php echo $theuser->ID; ?>"><?php echo $theuser->user_login; ?></a></strong>
+									<strong><a href="<?php echo esc_url_raw( 'user-edit.php?user_id=' .$theuser->ID ); ?>"><?php echo esc_html( $theuser->user_login ); ?></a></strong>
 								<?php } else { ?>
-									<strong><a href="admin.php?page=pmpro-approvals&user_id=<?php echo $theuser->ID; ?>"><?php echo $theuser->user_login; ?></a></strong>
+									<strong><a href="<?php echo esc_url_raw( 'admin.php?page=pmpro-approvals&user_id=' . $theuser->ID ); ?>"><?php echo esc_html( $theuser->user_login ); ?></a></strong>
 								<?php } ?>
 							<br />
 							<?php
@@ -208,7 +208,7 @@ class="alternate"<?php } ?>>
 							<?php do_action( 'pmpro_approvals_list_extra_cols_body', $theusers ); ?>						
 							<td>
 								<?php
-								echo esc_attr( $auser->membership );
+								echo esc_html( $auser->membership );
 								?>
 							</td>						
 							<td>										
@@ -225,14 +225,14 @@ class="alternate"<?php } ?>>
 
 										//link to unapprove
 										?>
-										[<a href="javascript:askfirst('Are you sure you want to reset approval for <?php echo $theuser->user_login; ?>?', '?page=pmpro-approvals&s=<?php echo urlencode( esc_attr( $s ) ); ?>&l=<?php echo $l; ?>&limit=<?php echo intval( $limit ); ?>&status=<?php echo $status; ?>&sortby=<?php echo $sortby; ?>&sortorder=<?php echo $sortorder; ?>&pn=<?php echo intval( $pn ); ?>&unapprove=<?php echo $theuser->ID; ?>&pmpro_approvals_nonce=<?php echo urlencode( $pmpro_approvals_nonce ); ?>');">X</a>]
+										[<a href="javascript:askfirst('Are you sure you want to reset approval for <?php echo $theuser->user_login; ?>?', '?page=pmpro-approvals&s=<?php echo urlencode( $s ); ?>&l=<?php echo $l; ?>&limit=<?php echo intval( $limit ); ?>&status=<?php echo $status; ?>&sortby=<?php echo $sortby; ?>&sortorder=<?php echo $sortorder; ?>&pn=<?php echo intval( $pn ); ?>&unapprove=<?php echo $theuser->ID; ?>&pmpro_approvals_nonce=<?php echo urlencode( $pmpro_approvals_nonce ); ?>');">X</a>]
 										<?php
 									}
 								} else {
 									?>
 																			
-									<a href="?page=pmpro-approvals&s=<?php echo urlencode( esc_attr( $s ) ); ?>&l=<?php echo $l; ?>&limit=<?php echo intval( $limit ); ?>&status=<?php echo esc_attr($status); ?>&sortby=<?php echo esc_attr($sortby); ?>&sortorder=<?php echo esc_attr($sortorder); ?>&pn=<?php echo intval( $pn ); ?>&approve=<?php echo $theuser->ID; ?>&pmpro_approvals_nonce=<?php echo urlencode( $pmpro_approvals_nonce ); ?>">Approve</a> |
-									<a href="?page=pmpro-approvals&s=<?php echo esc_attr( $s ); ?>&l=<?php echo $l; ?>&limit=<?php echo intval( $limit ); ?>&status=<?php echo $status; ?>&sortby=<?php echo esc_attr( $sortby ); ?>&sortorder=<?php echo esc_attr( $sortorder ); ?>&pn=<?php echo intval( $pn ); ?>&deny=<?php echo $theuser->ID; ?>&pmpro_approvals_nonce=<?php echo urlencode( $pmpro_approvals_nonce ); ?>">Deny</a>
+									<a href="?page=pmpro-approvals&s=<?php echo urlencode( $s ); ?>&l=<?php echo $l; ?>&limit=<?php echo intval( $limit ); ?>&status=<?php echo esc_html($status); ?>&sortby=<?php echo esc_html($sortby); ?>&sortorder=<?php echo esc_html($sortorder); ?>&pn=<?php echo intval( $pn ); ?>&approve=<?php echo $theuser->ID; ?>&pmpro_approvals_nonce=<?php echo urlencode( $pmpro_approvals_nonce ); ?>">Approve</a> |
+									<a href="?page=pmpro-approvals&s=<?php echo esc_html( $s ); ?>&l=<?php echo $l; ?>&limit=<?php echo intval( $limit ); ?>&status=<?php echo $status; ?>&sortby=<?php echo esc_html( $sortby ); ?>&sortorder=<?php echo esc_html( $sortorder ); ?>&pn=<?php echo intval( $pn ); ?>&deny=<?php echo $theuser->ID; ?>&pmpro_approvals_nonce=<?php echo urlencode( $pmpro_approvals_nonce ); ?>">Deny</a>
 									<?php
 								}
 								?>
@@ -256,7 +256,7 @@ class="alternate"<?php } ?>>
 	</form>
 	
 	<?php
-	echo pmpro_getPaginationString( $pn, $totalrows, $limit, 1, get_admin_url( null, '/admin.php?page=pmpro-approvals&s=' . urlencode( esc_attr( $s ) ) ), "&l=$l&limit=$limit&status=$status&sortby=$sortby&sortorder=$sortorder&pn=" );
+	echo pmpro_getPaginationString( $pn, $totalrows, $limit, 1, esc_url_raw( get_admin_url( null, '/admin.php?page=pmpro-approvals&s=' . urlencode( $s ) ) ), "&l=$l&limit=$limit&status=$status&sortby=$sortby&sortorder=$sortorder&pn=" );
 	?>
 	
 <?php
